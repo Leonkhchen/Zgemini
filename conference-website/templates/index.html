@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ conference.name }} | October 15, 2026</title>
+    <meta name="description" content="Join us for the premier 1-day Google Cloud Technologies conference. 8 expert-led talks, live demos, and networking.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <!-- Background Glows -->
+    <div class="glow glow-blue"></div>
+    <div class="glow glow-red"></div>
+    <div class="glow glow-green"></div>
+
+    <!-- Header / Navbar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <span class="logo-dot blue"></span>
+                <span class="logo-dot red"></span>
+                <span class="logo-dot yellow"></span>
+                <span class="logo-dot green"></span>
+                <span class="logo-text">NextGen<strong>GCP</strong></span>
+            </a>
+            <div class="nav-date">
+                <i class="fa-regular fa-calendar-days"></i> {{ conference.date }}
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-banner" style="background-image: linear-gradient(to bottom, rgba(11, 15, 25, 0.4), rgba(11, 15, 25, 0.95)), url('{{ url_for('static', filename='images/hero_banner.jpg') }}');">
+            <div class="hero-content">
+                <span class="hero-badge">1-Day Technical Conference</span>
+                <h1 class="hero-title">{{ conference.name }}</h1>
+                <p class="hero-subtitle">{{ conference.description }}</p>
+                
+                <div class="hero-meta-grid">
+                    <div class="meta-item">
+                        <div class="meta-icon"><i class="fa-solid fa-location-dot"></i></div>
+                        <div class="meta-details">
+                            <span class="meta-label">Venue & Location</span>
+                            <span class="meta-value">{{ conference.location }}</span>
+                        </div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-icon"><i class="fa-solid fa-clock"></i></div>
+                        <div class="meta-details">
+                            <span class="meta-label">Conference Schedule</span>
+                            <span class="meta-value">09:00 AM - 04:30 PM PDT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Dashboard -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number">8</span>
+                    <span class="stat-label">In-Depth Talks</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">2</span>
+                    <span class="stat-label">Expert Tracks</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">11</span>
+                    <span class="stat-label">Google Advocates</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">60</span>
+                    <span class="stat-label">Min Lunch Break</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Schedule Explorer -->
+    <section class="explorer-section" id="schedule-explorer">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Schedule & Sessions</h2>
+                <p class="section-desc">Explore the day's timetable. Search talks by keyword, filter by technology track, or manage your personal schedule bookmarks.</p>
+            </div>
+
+            <!-- Controls Panel -->
+            <div class="controls-panel">
+                <div class="search-box-wrapper">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="search-input" placeholder="Search by title, speaker name, bio, or category..." autocomplete="off">
+                    <button id="clear-search" class="clear-btn" style="display: none;"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="filters-wrapper">
+                    <button class="filter-pill active" data-category="all">
+                        <i class="fa-solid fa-list"></i> All Sessions
+                    </button>
+                    <button class="filter-pill" data-category="1">
+                        <span class="track-indicator cat-1"></span> Track 1: AI & Data
+                    </button>
+                    <button class="filter-pill" data-category="2">
+                        <span class="track-indicator cat-2"></span> Track 2: Infra & Security
+                    </button>
+                    <button class="filter-pill" data-category="bookmarks" id="bookmarks-filter-btn">
+                        <i class="fa-solid fa-star"></i> My Starred (<span id="bookmark-count">0</span>)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Schedule Timeline -->
+            <div class="schedule-timeline">
+                {% for talk in talks %}
+                    {% if talk.category_id == 0 %}
+                        <!-- Break Card (Coffee, Lunch) -->
+                        <div class="timeline-item break-item" data-category="break" id="talk-{{ talk.id }}">
+                            <div class="timeline-time">
+                                <span class="time-stamp">{{ talk.time }}</span>
+                                <span class="duration">
+                                    {% if talk.id == 'LUNCH' %}60 mins{% else %}20 mins{% endif %}
+                                </span>
+                            </div>
+                            <div class="timeline-line">
+                                <div class="line-dot break-dot">
+                                    {% if talk.id == 'LUNCH' %}
+                                        <i class="fa-solid fa-utensils"></i>
+                                    {% else %}
+                                        <i class="fa-solid fa-mug-hot"></i>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="timeline-content break-card-content">
+                                <h3 class="break-title">{{ talk.title }}</h3>
+                                <p class="break-description">{{ talk.description }}</p>
+                            </div>
+                        </div>
+                    {% else %}
+                        <!-- Standard Talk Card -->
+                        <div class="timeline-item talk-item" data-category="{{ talk.category_id }}" id="talk-{{ talk.id }}">
+                            <div class="timeline-time">
+                                <span class="time-stamp">{{ talk.time }}</span>
+                                <span class="duration">40 mins</span>
+                            </div>
+                            
+                            <div class="timeline-line">
+                                <div class="line-dot talk-dot cat-{{ talk.category_id }}"></div>
+                            </div>
+
+                            <div class="timeline-content talk-card" data-talk-id="{{ talk.id }}">
+                                <div class="talk-header">
+                                    <span class="talk-category-badge cat-{{ talk.category_id }}">
+                                        {{ talk.category }}
+                                    </span>
+                                    <button class="bookmark-btn" data-talk-id="{{ talk.id }}" aria-label="Star this session">
+                                        <i class="fa-regular fa-star star-unstarred"></i>
+                                        <i class="fa-solid fa-star star-starred"></i>
+                                    </button>
+                                </div>
+                                <h3 class="talk-title">{{ talk.title }}</h3>
+                                <p class="talk-desc-snippet">{{ talk.description }}</p>
+                                
+                                <div class="talk-footer">
+                                    <div class="speakers-strip">
+                                        {% for speaker in talk.speakers %}
+                                            <div class="speaker-avatar-name" title="{{ speaker.first_name }} {{ speaker.last_name }}">
+                                                <div class="speaker-avatar-initials">
+                                                    {{ speaker.first_name[0] }}{{ speaker.last_name[0] }}
+                                                </div>
+                                                <span class="speaker-name">{{ speaker.first_name }} {{ speaker.last_name }}</span>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <span class="view-details-action">View Session <i class="fa-solid fa-arrow-right"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- No Results State -->
+            <div id="no-results" class="no-results-card" style="display: none;">
+                <i class="fa-regular fa-calendar-xmark no-results-icon"></i>
+                <h3>No sessions match your search</h3>
+                <p>Try clearing your filters or typing a different keyword.</p>
+                <button id="reset-filters-btn" class="btn-primary">Reset Filters & Search</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Speaker Roster Section -->
+    <section class="speakers-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Featured Speakers</h2>
+                <p class="section-desc">Meet the engineering experts and developer advocates delivering this year's technical talks.</p>
+            </div>
+
+            <div class="speakers-grid">
+                {% for talk in talks %}
+                    {% for speaker in talk.speakers %}
+                        <div class="speaker-card" data-speaker-name="{{ speaker.first_name.lower() }} {{ speaker.last_name.lower() }}">
+                            <div class="speaker-card-header">
+                                <div class="speaker-large-avatar">
+                                    {{ speaker.first_name[0] }}{{ speaker.last_name[0] }}
+                                </div>
+                                <div class="speaker-header-info">
+                                    <h3 class="speaker-card-name">{{ speaker.first_name }} {{ speaker.last_name }}</h3>
+                                    <span class="speaker-card-title">{{ speaker.title }}</span>
+                                    <span class="speaker-card-company">{{ speaker.company }}</span>
+                                </div>
+                            </div>
+                            <div class="speaker-card-body">
+                                <p class="speaker-card-bio">{{ speaker.bio }}</p>
+                            </div>
+                            <div class="speaker-card-footer">
+                                <a href="{{ speaker.linkedin }}" target="_blank" rel="noopener noreferrer" class="linkedin-link">
+                                    <i class="fa-brands fa-linkedin"></i> Connect on LinkedIn
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2026 Google Cloud Developer Community. This is an informational demonstration portal for Google Cloud Technologies.</p>
+            <div class="footer-links">
+                <a href="#schedule-explorer">Schedule</a>
+                <a href="https://cloud.google.com" target="_blank" rel="noopener noreferrer">Google Cloud Platform</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Talk Details Modal -->
+    <div id="details-modal" class="modal-overlay" aria-hidden="true">
+        <div class="modal-card">
+            <button class="modal-close-btn" id="close-modal-btn" aria-label="Close modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="modal-header">
+                <div class="modal-meta-row">
+                    <span id="modal-category-badge" class="talk-category-badge">Category</span>
+                    <span id="modal-time" class="modal-time-text"><i class="fa-regular fa-clock"></i> 00:00 - 00:00</span>
+                </div>
+                <h2 id="modal-title" class="modal-title-text">Talk Title Placeholder</h2>
+            </div>
+            <div class="modal-body">
+                <div class="modal-description-section">
+                    <h4 class="modal-section-title">Session Abstract</h4>
+                    <p id="modal-description" class="modal-description-text">Abstract text goes here...</p>
+                </div>
+                
+                <div class="modal-speakers-section">
+                    <h4 class="modal-section-title">Speakers</h4>
+                    <div id="modal-speakers-list" class="modal-speakers-list">
+                        <!-- Speakers injected by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script imports -->
+    <script>
+        // Inject talks database into client script context
+        const TALKS_DB = {{ talks|tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

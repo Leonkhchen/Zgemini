@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AuraFocus — Calm Pomodoro & Ambient Sounds</title>
+  <!-- Google Fonts: Plus Jakarta Sans for clean typography & Playfair Display for elegant headings -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Load App as ES Module -->
+  <script type="module" src="app.js" defer></script>
+</head>
+<body class="theme-forest">
+  <div class="app-background"></div>
+  
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <h1 class="brand-title">AuraFocus</h1>
+        <p class="brand-subtitle">Find your calm flow state</p>
+      </div>
+      
+      <div class="header-controls">
+        <!-- Quick stats summary -->
+        <div class="quick-stats">
+          <div class="stat-pill">
+            <span class="stat-dot"></span>
+            <span id="quick-count">0/4 Pomodoros</span>
+          </div>
+        </div>
+
+        <!-- Theme Selector -->
+        <div class="theme-selector-container">
+          <button id="theme-btn" class="icon-btn" title="Switch Theme" aria-label="Switch Theme">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+              <circle cx="12" cy="12" r="4" />
+            </svg>
+          </button>
+          <div id="theme-dropdown" class="dropdown-menu hidden">
+            <button class="theme-option active" data-theme="forest">
+              <span class="theme-preview forest"></span> Forest Breeze
+            </button>
+            <button class="theme-option" data-theme="ocean">
+              <span class="theme-preview ocean"></span> Ocean Calm
+            </button>
+            <button class="theme-option" data-theme="sunset">
+              <span class="theme-preview sunset"></span> Sunset Rose
+            </button>
+            <button class="theme-option" data-theme="nordic">
+              <span class="theme-preview nordic"></span> Nordic Slate
+            </button>
+          </div>
+        </div>
+
+        <!-- Settings toggle -->
+        <button id="settings-btn" class="icon-btn" title="Settings" aria-label="Settings">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3" />
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace Grid -->
+    <main class="app-grid">
+      
+      <!-- Left Column: Ambient & Stats -->
+      <section class="grid-column side-column left-side">
+        <!-- Soundboard Card -->
+        <div class="glass-card soundboard-card">
+          <div class="card-header">
+            <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v20M17 5v14M22 9v6M7 8v8M2 10v4" />
+            </svg>
+            <h2>Ambient Sounds</h2>
+          </div>
+          <p class="card-desc">Synthesized soundscapes to drown out distractions.</p>
+          
+          <div class="sound-controls">
+            <!-- Audio Context State warning / Resume prompt -->
+            <button id="enable-audio-btn" class="primary-btn pulse-glow hidden">
+              Enable Ambient Audio
+            </button>
+
+            <!-- Sound Option: Rain -->
+            <div class="sound-row">
+              <div class="sound-info">
+                <button class="sound-toggle-btn" data-sound="rain" aria-label="Toggle Rain Sound">
+                  <svg class="sound-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25" />
+                    <path d="M8 19l-2 3M12 19v3M16 19l2 3" />
+                  </svg>
+                  <span>Soft Rain</span>
+                </button>
+              </div>
+              <div class="volume-slider-wrapper">
+                <input type="range" class="volume-slider" data-sound="rain" min="0" max="100" value="40" aria-label="Rain Volume">
+              </div>
+            </div>
+
+            <!-- Sound Option: Ocean Waves -->
+            <div class="sound-row">
+              <div class="sound-info">
+                <button class="sound-toggle-btn" data-sound="waves" aria-label="Toggle Ocean Waves Sound">
+                  <svg class="sound-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M2 18h20M2 14c4-2.5 6 2.5 10 0s6-2.5 10 0M2 10c4-2.5 6 2.5 10 0s6-2.5 10 0" />
+                  </svg>
+                  <span>Ocean Waves</span>
+                </button>
+              </div>
+              <div class="volume-slider-wrapper">
+                <input type="range" class="volume-slider" data-sound="waves" min="0" max="100" value="30" aria-label="Waves Volume">
+              </div>
+            </div>
+
+            <!-- Sound Option: Focus Noise -->
+            <div class="sound-row">
+              <div class="sound-info">
+                <button class="sound-toggle-btn" data-sound="white" aria-label="Toggle Focus Noise">
+                  <svg class="sound-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="4" />
+                    <path d="M6 12h12M10 8h4M10 16h4" />
+                  </svg>
+                  <span>Focus Noise</span>
+                </button>
+              </div>
+              <div class="volume-slider-wrapper">
+                <input type="range" class="volume-slider" data-sound="white" min="0" max="100" value="20" aria-label="Noise Volume">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Productivity Analytics Card -->
+        <div class="glass-card analytics-card">
+          <div class="card-header">
+            <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 20V10M18 20V4M6 20v-4" />
+            </svg>
+            <h2>Daily Insights</h2>
+          </div>
+          
+          <div class="analytics-content">
+            <div class="stats-grid">
+              <div class="stat-box">
+                <span class="stat-val" id="stat-total-time">0m</span>
+                <span class="stat-lbl">Focus Time</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-val" id="stat-sessions">0</span>
+                <span class="stat-lbl">Completed</span>
+              </div>
+            </div>
+
+            <div class="progress-ring-container">
+              <div class="circular-progress-wrapper">
+                <svg class="analytics-ring" viewBox="0 0 100 100">
+                  <circle class="ring-bg" cx="50" cy="50" r="42" />
+                  <circle id="goal-progress-ring" class="ring-fg" cx="50" cy="50" r="42" />
+                </svg>
+                <div class="analytics-center-text">
+                  <span id="goal-percentage">0%</span>
+                  <span class="goal-sub">of goal</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Center Column: Focus Timer Card -->
+      <section class="grid-column center-column">
+        <div class="glass-card timer-card">
+          <!-- Timer Modes -->
+          <div class="timer-modes">
+            <button class="mode-btn active" data-mode="pomodoro">Pomodoro</button>
+            <button class="mode-btn" data-mode="short-break">Short Break</button>
+            <button class="mode-btn" data-mode="long-break">Long Break</button>
+          </div>
+
+          <!-- Main circular clock visualizer -->
+          <div class="timer-clock-display">
+            <div class="circular-timer-wrapper">
+              <svg class="timer-ring-svg" viewBox="0 0 200 200">
+                <defs>
+                  <linearGradient id="ring-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="var(--accent-gradient-start)" />
+                    <stop offset="100%" stop-color="var(--accent-gradient-end)" />
+                  </linearGradient>
+                </defs>
+                <circle class="timer-ring-bg" cx="100" cy="100" r="88" />
+                <circle id="timer-progress-ring" class="timer-ring-fg" cx="100" cy="100" r="88" />
+              </svg>
+              <div class="timer-text-container">
+                <span id="timer-countdown" class="timer-countdown">25:00</span>
+                <span id="timer-state-label" class="timer-state-label">Ready to Focus</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Focused Task Card Banner -->
+          <div id="focus-task-banner" class="focus-task-banner empty">
+            <span class="focus-label">Focusing on:</span>
+            <h3 id="focus-task-title" class="focus-task-title">Select a task below to begin</h3>
+            <div class="focus-task-progress-bar">
+              <span id="focus-task-progress-text">Session 0/0</span>
+            </div>
+          </div>
+
+          <!-- Timer Controls -->
+          <div class="timer-controls">
+            <button id="skip-btn" class="icon-btn secondary-btn" title="Skip Session" aria-label="Skip Session">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 4l10 8-10 8V4zM19 5v14" />
+              </svg>
+            </button>
+            
+            <button id="play-pause-btn" class="play-btn-large" aria-label="Play Timer">
+              <svg class="play-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              <svg class="pause-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+              </svg>
+            </button>
+
+            <button id="reset-btn" class="icon-btn secondary-btn" title="Reset Timer" aria-label="Reset Timer">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M23 4v6h-6M1 20v-6h6" />
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Task Manager -->
+      <section class="grid-column side-column right-side">
+        <div class="glass-card tasks-card">
+          <div class="card-header">
+            <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 11l3 3L22 4" />
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+            </svg>
+            <h2>Focus Tasks</h2>
+          </div>
+          <p class="card-desc">Prioritize your tasks. Select one to focus.</p>
+
+          <!-- Add Task Form -->
+          <form id="add-task-form" class="add-task-form">
+            <div class="input-group">
+              <input type="text" id="task-input" placeholder="What are you working on?" required autocomplete="off">
+            </div>
+            
+            <div class="task-form-row">
+              <div class="session-est-input">
+                <span class="est-label">Estimate sessions:</span>
+                <div class="est-controls">
+                  <button type="button" class="est-adjust-btn" id="est-dec">—</button>
+                  <span id="est-count" class="est-count-val">1</span>
+                  <button type="button" class="est-adjust-btn" id="est-inc">+</button>
+                </div>
+              </div>
+              <button type="submit" class="add-task-btn" aria-label="Add Task">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </button>
+            </div>
+          </form>
+
+          <!-- Task List -->
+          <div id="tasks-list" class="tasks-list">
+            <div class="tasks-empty-state">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M9 12l2 2 4-4"/>
+              </svg>
+              <p>No tasks yet. Add a task to start tracking your progress.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Settings Modal Overlay -->
+  <div id="settings-modal" class="modal-overlay hidden">
+    <div class="glass-card modal-content">
+      <div class="modal-header">
+        <h2>Timer Settings</h2>
+        <button id="close-settings-btn" class="close-btn" aria-label="Close Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Durations -->
+        <div class="settings-section">
+          <h3>Session Durations (minutes)</h3>
+          <div class="duration-inputs">
+            <div class="duration-control">
+              <label for="input-pomodoro">Focus</label>
+              <input type="number" id="input-pomodoro" min="1" max="180" value="25">
+            </div>
+            <div class="duration-control">
+              <label for="input-short-break">Short Break</label>
+              <input type="number" id="input-short-break" min="1" max="60" value="5">
+            </div>
+            <div class="duration-control">
+              <label for="input-long-break">Long Break</label>
+              <input type="number" id="input-long-break" min="1" max="120" value="15">
+            </div>
+          </div>
+        </div>
+
+        <!-- Chime and Alert settings -->
+        <div class="settings-section">
+          <h3>Chime Notification</h3>
+          <div class="slider-control">
+            <div class="slider-label-row">
+              <label for="input-chime-volume">Volume</label>
+              <span id="chime-volume-val">50%</span>
+            </div>
+            <input type="range" id="input-chime-volume" min="0" max="100" value="50">
+          </div>
+          <button id="test-chime-btn" class="secondary-btn text-btn">Test Chime</button>
+        </div>
+
+        <!-- Daily Target -->
+        <div class="settings-section">
+          <h3>Daily Target</h3>
+          <div class="target-control">
+            <label for="input-daily-goal">Daily Goal (sessions)</label>
+            <input type="number" id="input-daily-goal" min="1" max="24" value="4">
+          </div>
+        </div>
+
+        <!-- Auto Transitions -->
+        <div class="settings-section">
+          <h3>Auto Settings</h3>
+          <div class="switch-row">
+            <div class="switch-info">
+              <h4>Auto-start Breaks</h4>
+              <p>Start next break immediately after Pomodoro ends</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="input-auto-breaks">
+              <span class="slider-round"></span>
+            </label>
+          </div>
+          <div class="switch-row">
+            <div class="switch-info">
+              <h4>Auto-start Pomodoros</h4>
+              <p>Start next Pomodoro immediately after break ends</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="input-auto-pomodoros">
+              <span class="slider-round"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="save-settings-btn" class="primary-btn">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

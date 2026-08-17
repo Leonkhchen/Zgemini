@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>國一數學測驗卷：整數的加減法、乘除法 (標準可列印考卷)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --border: #333333;
+      --paper-bg: #ffffff;
+      --text: #111111;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #e2e8f0;
+      font-family: "Noto Serif TC", "DFKai-SB", "BiauKai", "標楷體", serif;
+      color: var(--text);
+      line-height: 1.6;
+      padding: 20px 10px;
+    }
+
+    /* 控制列 (列印時隱藏) */
+    .toolbar {
+      max-width: 860px;
+      margin: 0 auto 20px auto;
+      background: #1e293b;
+      color: #ffffff;
+      padding: 14px 20px;
+      border-radius: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      font-family: "Noto Sans TC", sans-serif;
+    }
+
+    .toolbar h2 {
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: #ffffff;
+    }
+    .btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: #334155;
+      color: #f1f5f9;
+      border: 1px solid #475569;
+    }
+    .btn-outline:hover {
+      background: #475569;
+    }
+
+    .btn-toggle-ans {
+      background: #d97706;
+      color: #ffffff;
+    }
+    .btn-toggle-ans:hover {
+      background: #b45309;
+    }
+
+    /* A4 試卷頁面容器 */
+    .page-container {
+      max-width: 840px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .exam-page {
+      background: var(--paper-bg);
+      width: 100%;
+      min-height: 1120px;
+      padding: 36px 45px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      border-radius: 4px;
+      position: relative;
+    }
+
+    /* 考卷頭部標題區 */
+    .exam-header {
+      text-align: center;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+    }
+
+    .institute-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 2px;
+    }
+
+    .institute-sub {
+      font-size: 12px;
+      color: #4b5563;
+      margin-bottom: 6px;
+    }
+
+    .exam-main-title {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color: #000;
+      margin-bottom: 10px;
+    }
+
+    .student-info-bar {
+      display: grid;
+      grid-template-columns: 1.2fr 1.5fr 1.3fr 1.2fr;
+      border: 1.5px solid var(--border);
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    .info-cell {
+      padding: 6px 10px;
+      border-right: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+    }
+
+    .info-cell:last-child {
+      border-right: none;
+      background: #fdf2f2;
+      color: #991b1b;
+    }
+
+    /* 大題樣式 */
+    .section-title {
+      font-size: 15px;
+      font-weight: 800;
+      background: #f3f4f6;
+      padding: 4px 10px;
+      border-left: 5px solid #111;
+      margin: 14px 0 10px 0;
+    }
+
+    .question-item {
+      margin-bottom: 12px;
+      font-size: 14.5px;
+    }
+
+    .q-text {
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    /* 填充題兩表格線 */
+    .fill-grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 16px;
+      margin-bottom: 10px;
+    }
+
+    .fill-box-item {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      padding: 4px 0;
+    }
+
+    .bracket-ans {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 90px;
+      height: 28px;
+      border-bottom: 1.5px solid #000;
+      margin: 0 4px;
+      font-weight: 700;
+      color: #b91c1c;
+      font-family: "Noto Sans TC", sans-serif;
+    }
+
+    .ans-hide .ans-text {
+      visibility: hidden;
+    }
+
+    /* 計算題雙欄方格排版 */
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .calc-card {
+      border: 1.2px solid #333;
+      border-radius: 4px;
+      padding: 10px 12px;
+      min-height: 145px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: #ffffff;
+    }
+
+    .calc-q-stmt {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .calc-work-area {
+      flex: 1;
+      min-height: 75px;
+      border-bottom: 1px dashed #bbb;
+      position: relative;
+      font-size: 13px;
+      color: #0369a1;
+      font-family: "Noto Sans TC", sans-serif;
+    }
+
+    .calc-ans-line {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      font-size: 13.5px;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+
+    .calc-ans-val {
+      color: #b91c1c;
+      font-family: "Noto Sans TC", sans-serif;
+      margin-left: 4px;
+      min-width: 60px;
+      display: inline-block;
+      text-align: center;
+      border-bottom: 1.5px solid #000;
+    }
+
+    /* 頁底指示 */
+    .page-footer-note {
+      text-align: center;
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 15px;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 6px;
+    }
+
+    /* 列印專屬 CSS */
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+      }
+
+      .toolbar {
+        display: none !important;
+      }
+
+      .page-container {
+        max-width: 100%;
+        gap: 0;
+      }
+
+      .exam-page {
+        box-shadow: none;
+        border-radius: 0;
+        padding: 18mm 15mm;
+        page-break-after: always;
+        min-height: auto;
+      }
+
+      .calc-card {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 控制工具列 (可切換空白考卷/答案卷，支援一鍵 A4 列印) -->
+  <div class="toolbar">
+    <h2>📝 國一數學測驗卷（整數加減乘除）</h2>
+    <div class="btn-group">
+      <button class="btn btn-toggle-ans" id="toggleAnsBtn" onclick="toggleAnswers()">
+        👁️ 顯示/隱藏 標準解答
+      </button>
+      <button class="btn btn-primary" onclick="window.print()">
+        🖨️ 列印 A4 考卷 (Ctrl+P)
+      </button>
+    </div>
+  </div>
+
+  <div class="page-container ans-hide" id="examContainer">
+
+    <!-- ==================== 第 1 頁：填充題 ==================== -->
+    <div class="exam-page">
+      <div class="exam-header">
+        <div class="institute-title">臺師補習班</div>
+        <div class="institute-sub">（孩子的一步 臺師細心呵護）</div>
+        <div class="exam-main-title">國一數學測驗卷：整數的加減法、乘除法</div>
+        
+        <div class="student-info-bar">
+          <div class="info-cell">學府：學府國中</div>
+          <div class="info-cell">測驗日期：2026 / 08 / 04</div>
+          <div class="info-cell">姓名：＿＿＿＿＿＿</div>
+          <div class="info-cell">得分：<span class="ans-text" style="color:#b91c1c; font-weight:800; margin-left:6px;">100</span></div>
+        </div>
+      </div>
+
+      <div class="section-title">一、填充題：（每格 4 分，共 56 分）</div>
+
+      <!-- 第 1 題 -->
+      <div class="question-item">
+        <div class="q-text">1. 計算下列各式的值：</div>
+        <div class="fill-grid-2col">
+          <div class="fill-box-item">(1) 36 ÷ (-3) = <span class="bracket-ans"><span class="ans-text">-12</span></span>。</div>
+          <div class="fill-box-item">(2) (-5) × [6 × (-12)] = <span class="bracket-ans"><span class="ans-text">360</span></span>。</div>
+          <div class="fill-box-item">(3) [19 × (-25)] × 4 = <span class="bracket-ans"><span class="ans-text">-1900</span></span>。</div>
+          <div class="fill-box-item">(4) (-54) ÷ 6 ÷ (-3) = <span class="bracket-ans"><span class="ans-text">3</span></span>。</div>
+          <div class="fill-box-item">(5) 96 ÷ [(-8) ÷ (-2)] = <span class="bracket-ans"><span class="ans-text">24</span></span>。</div>
+          <div class="fill-box-item">(6) (-18) ÷ [(-3) × 6] = <span class="bracket-ans"><span class="ans-text">1</span></span>。</div>
+        </div>
+      </div>
+
+      <!-- 第 2 題 -->
+      <div class="question-item">
+        <div class="q-text">2. 請填入 ＞ 或 ＝ 或 ＜ ：</div>
+        <div style="padding-left: 8px; margin-bottom: 8px;">
+          <div style="margin-bottom: 6px;">(1) (-54) ÷ (-6) ÷ (-7) &nbsp;【 <span class="ans-text" style="color:#b91c1c; font-weight:800;">＝</span> 】&nbsp; (-54) ÷ [(-6) × (-7)]</div>
+          <div>(2) (-720) ÷ (-8) × (-2) &nbsp;【 <span class="ans-text" style="color:#b91c1c; font-weight:800;">＜</span> 】&nbsp; (-720) ÷ [(-8) × (-2)]</div>
+        </div>
+      </div>
+
+      <!-- 第 3 題 -->
+      <div class="question-item">
+        <div class="q-text">3. 數線上有 A(-3)、B(9)、C(11)、D(-5) 四點，求：</div>
+        <div class="fill-grid-2col">
+          <div class="fill-box-item">(1) AC + BD = <span class="bracket-ans"><span class="ans-text">28</span></span>。</div>
+          <div class="fill-box-item">(2) C、D 的中點坐標為 <span class="bracket-ans"><span class="ans-text">3</span></span>。</div>
+        </div>
+      </div>
+
+      <!-- 第 4 題 -->
+      <div class="question-item">
+        <div class="q-text">4. 如果 <i>a</i> 是比 -8 大 5 的數，<i>b</i> 是比 -14 小 5 的數，那麼 <i>a</i> × <i>b</i> = <span class="bracket-ans"><span class="ans-text">57</span></span>。</div>
+      </div>
+
+      <!-- 第 5 題 -->
+      <div class="question-item">
+        <div class="q-text">5. 欲使「32 ÷ 4 - 8 □ (-2) = 12」成立，則 □ 應填入哪一個運算符號？ <span class="bracket-ans"><span class="ans-text">÷</span></span></div>
+      </div>
+
+      <!-- 第 6 題 -->
+      <div class="question-item">
+        <div class="q-text">6. 已知：</div>
+        <div style="padding-left: 16px; font-size: 13.5px; line-height: 1.8;">
+          <div>甲數 = 33 × 999 × 55 × 0 × 5</div>
+          <div>乙數 = [(-23) × (-99)] × (-35) ÷ (-5)</div>
+          <div>丙數 = 15625 ÷ (-25) ÷ (-15)</div>
+          <div>丁數 = (-1525) ÷ (-12) × 18 ÷ (-20)</div>
+          <div style="margin-top: 4px; font-size: 14px; font-weight: 600;">
+            上列各數中，計算結果為<b>正數</b>的是【 <span class="ans-text" style="color:#b91c1c; font-weight:800;">乙、丙</span> 】，為<b>負數</b>的是【 <span class="ans-text" style="color:#b91c1c; font-weight:800;">丁</span> 】。
+          </div>
+        </div>
+      </div>
+
+      <div class="page-footer-note">（第 1 頁，共 2 頁，請翻面繼續作答）</div>
+    </div>
+
+
+    <!-- ==================== 第 2 頁：計算題 ==================== -->
+    <div class="exam-page">
+      <div class="exam-header">
+        <div class="exam-main-title" style="font-size: 20px;">國一數學測驗卷：整數的加減法、乘除法（第 2 頁）</div>
+      </div>
+
+      <div class="section-title">二、計算題：（每題 4 分，共 44 分） <i>※請寫出計算過程與最後答案</i></div>
+
+      <div class="calc-grid">
+        
+        <!-- Q1 -->
+        <div class="calc-card">
+          <div class="calc-q-stmt">1. (-2 - 3) - (-5 - 8) = ?</div>
+          <div class="calc-work-area">
+            <div class="ans-text">
+              原式 = (-5) - (-13)<br/>
+              = -5 + 13 = 8
+            </div>
+          </div>
+          <div class="calc-ans-line">答：<span class="calc-ans-val"><span class="ans-text">8</span></span></div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="calc-card">
+          <div class="calc-q-stmt">2. 267 - 456 - (-33) + 156 = ?</div>
+          <div class="calc-work-area">
+            <div class="ans-text">
+              原式 = 267 + 33 + 156 - 456<br/>
+              = 456 - 456 = 0
+            </div>
+          </div>
+          <div class="calc-ans-line">答：<span class="calc-ans-val"><span class="ans-text">0</span></span></div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="calc-card">
+          <div class="calc-q-stmt">3. (-36) + 49 - (-15) - 61 = ?</div>
+          <div class="calc-work-area">
+            <div class="ans-text">
+              原式 = -36 + 49 + 15 - 61<br/>
+              = (49 + 15) - (36 + 61) = 64 - 97 = -33
+            </div>
+          </div>
+          <div class="calc-ans-line">答：<span class="calc-ans-val"><span class="ans-text">-33</span></span></div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="calc-card">
+          <div class="calc-q-stmt">4. -15 - 95 - 995 - 9995 = ?</div>
+          <div class="calc-work-area">
+            <div class="ans-text">
+              原式 = -(15 + 95 + 995 + 9995)<br/>
+              = -(20 + 100 + 1000 + 10000 - 20) = -11100
+            </div>
+          </div>
+          <div class="calc-ans-line">答：<span class="calc-ans-val"><span class="ans-text">-11100</span></span></div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="calc-card">
+          <div class="calc-q-stmt">5. (-6) × 7 + (-8) × (-5) = ?</div>
+          <div class="calc-work-area">
+            <div class="ans-text">
+              原式 = (-42) + 40<br/>
+              = -2
+            </div>
+          </div>
+          <div class="calc-ans-line">答：<span class="calc-ans-val"><span class="ans-text">-2</span></span></div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="calc-card">
+          <div class="calc-q-stmt">6. 4 × (-15) - (-21) ÷ 3 = ?</div>
+          <div class="calc-work-area">
+            <div class="ans-text">
+              原式 = (-60) - (-7)<br/>
+              = -60 + 7 = -53
+            </div>
+          </div>
+          <div class="calc-ans-line">答：<span class="calc-ans-val"><span class="ans-text">-53</span></span></div>
+        </div>
+
+        <!-- Q7 -->
+        <div class="calc-card">
+          <div class="calc-q-stmt">7. (-7) × (-4) + (12 - 18) ÷ 3 = ?</div>
+          <div class="calc-work-area">
+            <div class="ans-text">
+              原式 = 28 + (-6) ÷ 3<br/>
+              = 28 + (-2) = 26
+            </div>
+          </div>
+          <div class="calc-ans-line">答：<span class="calc-ans-val"><span class="ans-text">26</span></span></div>
+        </div>
+
+        <!-- Q8 -->
+        <div class="calc-card">
+          <div class="calc-q-stmt">8. (-12) + 3 × [(-5) - (-3)] = ?</div>
+          <div class="calc-work-area">
+            <div class="ans-text">
+              原式 = (-12) + 3 × [-5 + 3]<br/>
+              = -12 + 3 × (-2) = -12 - 6 = -18
+            </div>
+          </div>
+          <div class="calc-ans-line">答：<span class="calc-ans-val"><span class="ans-text">-18</span></span></div>
+        </div>
+
+        <!-- Q9 -->
+        <div class="calc-card">
+          <div class="calc-q-stmt">9. [24 - 2 × (-3)] ÷ 3 - (-3) = ?</div>
+          <div class="calc-work-area">
+            <div class="ans-text">
+              原式 = [24 - (-6)] ÷ 3 + 3<br/>
+              = 30 ÷ 3 + 3 = 10 + 3 = 13
+            </div>
+          </div>
+          <div class="calc-ans-line">答：<span class="calc-ans-val"><span class="ans-text">13</span></span></div>
+        </div>
+
+        <!-- Q10 -->
+        <div class="calc-card">
+          <div class="calc-q-stmt">10. 26 ÷ [28 ÷ 7 - (-3) × 3] + 7 = ?</div>
+          <div class="calc-work-area">
+            <div class="ans-text">
+              原式 = 26 ÷ [4 - (-9)] + 7<br/>
+              = 26 ÷ 13 + 7 = 2 + 7 = 9
+            </div>
+          </div>
+          <div class="calc-ans-line">答：<span class="calc-ans-val"><span class="ans-text">9</span></span></div>
+        </div>
+
+        <!-- Q11 -->
+        <div class="calc-card" style="grid-column: span 2;">
+          <div class="calc-q-stmt">11. 9 + (-2) × [18 - (-5) × 3] ÷ 3 = ?</div>
+          <div class="calc-work-area">
+            <div class="ans-text">
+              原式 = 9 + (-2) × [18 - (-15)] ÷ 3<br/>
+              = 9 + (-2) × [18 + 15] ÷ 3<br/>
+              = 9 + (-2) × 33 ÷ 3 = 9 + (-2) × 11 = 9 - 22 = -13
+            </div>
+          </div>
+          <div class="calc-ans-line">答：<span class="calc-ans-val"><span class="ans-text">-13</span></span></div>
+        </div>
+
+      </div>
+
+      <div class="page-footer-note">（測驗結束，請仔細檢查各題正負號與計算過程）</div>
+    </div>
+
+  </div>
+
+  <script>
+    function toggleAnswers() {
+      const container = document.getElementById('examContainer');
+      const btn = document.getElementById('toggleAnsBtn');
+      if (container.classList.contains('ans-hide')) {
+        container.classList.remove('ans-hide');
+        btn.innerHTML = '🙈 隱藏解答 (切換為空白學生考卷)';
+        btn.style.background = '#059669';
+      } else {
+        container.classList.add('ans-hide');
+        btn.innerHTML = '👁️ 顯示標準解答 (教師詳解卷)';
+        btn.style.background = '#d97706';
+      }
+    }
+  </script>
+</body>
+</html>

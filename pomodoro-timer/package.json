@@ -1,0 +1,25 @@
+{
+  "name": "aurafocus",
+  "version": "1.0.0",
+  "description": "A calm and aesthetic Pomodoro timer application with synthesized ambient soundscapes.",
+  "main": "app.js",
+  "scripts": {
+    "start": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "pomodoro",
+    "timer",
+    "productivity",
+    "aesthetic",
+    "ambient-sounds",
+    "web-audio-api"
+  ],
+  "author": "Antigravity",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^5.2.11"
+  }
+}
