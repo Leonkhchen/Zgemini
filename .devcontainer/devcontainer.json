@@ -7,8 +7,12 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "GoogleCloudTools.cloudcode"
-      ]
+        "GoogleCloudTools.cloudcode",
+        "Google.geminicodeassist"
+      ],
+      "settings": {
+        "cloudcode.gemini.enable": true
+      }
     }
   },
   "forwardPorts": [8080]
