@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch: # 支援在 GitHub 網頁上手動點擊執行
+  workflow_dispatch:
 
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
@@ -30,3 +30,4 @@ jobs:
           region: ${{ env.REGION }}
           source: ./
           flags: '--allow-unauthenticated'
+          env_vars: ${{ secrets.GEMINI_API_KEY != '' && format('GEMINI_API_KEY={0}', secrets.GEMINI_API_KEY) || '' }}
